@@ -198,29 +198,29 @@ public class Banco {
 		return id;
 	}
 
-//	public static List<Solicitacao> listarUsuarioPorEmail(String usuario) throws SQLException {
-//		List<Solicitacao> lista = new ArrayList<Solicitacao>();
-//		Connection conn = Banco.getConexao();
-//		String sql ="SELECT * FROM Empregado as e " +
-//				"INNER JOIN usuario as u ON s.matricula = e.matricula "+
-//				"INNER JOIN Usuario as u ON s.matricula = u.matricula "+
-//				"WHERE u.nome = ? ";
-//		PreparedStatement prepStmt = conn.prepareStatement(sql);
-//		prepStmt.setString(1, usuario);
-//		ResultSet rs = prepStmt.executeQuery();
-//		while (rs.next()) {
-//			Integer id = rs.getInt("id");
-//			Date data = rs.getDate("data");
-//			String descricao = rs.getString("descricao");
-//			Integer situacao = rs.getInt("situacao");
-//			String matricula = rs.getString("matricula");
-//			Solicitacao solicitacao = new Solicitacao(id, data, descricao, situacao, matricula);
-//			lista.add(solicitacao);
-//		}
-//		rs.close();
-//		prepStmt.close();
-//		return lista;
-//	}
+	public static List<Solicitacao> listarUsuarioPorEmail(String usuario) throws SQLException {
+		List<Solicitacao> lista = new ArrayList<Solicitacao>();
+		Connection conn = Banco.getConexao();
+		String sql ="SELECT * FROM Empregado as e " +
+				"INNER JOIN usuario as u ON s.matricula = e.matricula "+
+				"INNER JOIN Usuario as u ON s.matricula = u.matricula "+
+				"WHERE u.nome = ? ";
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		prepStmt.setString(1, usuario);
+		ResultSet rs = prepStmt.executeQuery();
+		while (rs.next()) {
+			Integer id = rs.getInt("id");
+			Date data = rs.getDate("data");
+			String descricao = rs.getString("descricao");
+			Integer situacao = rs.getInt("situacao");
+			String matricula = rs.getString("matricula");
+			Solicitacao solicitacao = new Solicitacao(id, data, descricao, situacao, matricula);
+			lista.add(solicitacao);
+		}
+		rs.close();
+		prepStmt.close();
+		return lista;
+	}
 	public static List<Solicitacao> listarSolicitacoesPorUsuario(String nome) throws SQLException {
 		List<Solicitacao> lista = new ArrayList<Solicitacao>();
 		Connection conn = Banco.getConexao();
