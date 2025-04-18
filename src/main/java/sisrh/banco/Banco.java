@@ -227,9 +227,9 @@ public class Banco {
 		String sql ="SELECT * FROM Solicitacao as s " +
 				"INNER JOIN Empregado as e ON s.matricula = e.matricula "+
 				"INNER JOIN Usuario as u ON s.matricula = u.matricula "+
-				"WHERE u.nome = ? ";
+				"WHERE e.nome LIKE ? ";
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		prepStmt.setString(1, nome);
+		prepStmt.setString(1,"%" + nome + "%");
 		ResultSet rs = prepStmt.executeQuery();
 		while (rs.next()) {
 			Integer id = rs.getInt("id");
