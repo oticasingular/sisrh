@@ -1,10 +1,10 @@
-name: Clojure CI
+name: Clojure CI + WAR Deploy
 
 on:
   push:
     branches: [ "master" ]
   pull_request:
-    branches: [ "*" ]  # Agora vai acionar para qualquer branch em um PR
+    branches: [ "*" ]
 
 jobs:
   build:
@@ -24,3 +24,12 @@ jobs:
 
       - name: Run tests
         run: lein test
+
+      - name: Build WAR
+        run: lein ring uberwar  # ou o comando específico do seu projeto para gerar .war
+
+      - name: Upload WAR artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-webapp-war
+          path: target/*.war
