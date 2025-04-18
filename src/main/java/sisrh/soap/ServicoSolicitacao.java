@@ -23,9 +23,12 @@ public class ServicoSolicitacao {
 
     @WebMethod(action = "listarSolicitacoesPorUsuario")
     public Solicitacoes listarSolicitacoes(String nome) throws Exception {
-
         Autenticador.autenticarUsuarioSenha(context);
         Solicitacoes solicitacoes = new Solicitacoes();
+
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do empregado não pode ser vazio.");
+        }
 
         List<Solicitacao> lista = Banco.listarSolicitacoesPorUsuario(nome);
         for(Solicitacao sol : lista) {

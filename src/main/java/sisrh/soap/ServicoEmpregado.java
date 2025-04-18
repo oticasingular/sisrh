@@ -3,6 +3,9 @@ package sisrh.soap;
 import sisrh.banco.Banco;
 import sisrh.dto.Empregado;
 import sisrh.dto.Empregados;
+import sisrh.dto.Solicitacao;
+import sisrh.dto.Solicitacoes;
+import sisrh.exception.SISRHException;
 import sisrh.seguranca.Autenticador;
 
 import javax.annotation.Resource;
@@ -57,5 +60,21 @@ public class ServicoEmpregado {
             }
         }
         return empregados;
+    }
+
+    @WebMethod(action= "listarSolicitacoesEmpregados")
+    public Solicitacoes listarSolicitacoesEmpregados(String nome) throws Exception {
+     Autenticador.autenticarUsuarioSenha(context);
+
+        List<Solicitacao> lista = Banco.listarSolicitacoesPorUsuario(nome);
+        if(lista.isEmpty()){
+            throw new SISRHException("Usuário sem solicitações.");
+        }
+
+        Solicitacoes solicitacoes =  new Solicitacoes();
+        for(Solicitacao sol : lista){
+            solicitacoes.getSolicitacoes().add(sol);
+        }
+        return solicitacoes;
     }
 }
