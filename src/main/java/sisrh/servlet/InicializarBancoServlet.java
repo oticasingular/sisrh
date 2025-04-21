@@ -77,5 +77,7 @@ public class InicializarBancoServlet extends HttpServlet {
 		}
 		return contentBuilder.toString();
 	}
-
+	public void inicializarBancoViaClojure() {
+		carregarEstruturaDados();
+	}
 }
