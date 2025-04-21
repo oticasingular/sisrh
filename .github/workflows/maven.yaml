@@ -29,7 +29,7 @@ jobs:
       - name: Preparar diretório de deploy
         run: |
           mkdir deploy
-          cp target/*.war deploy/
+          cp target/sisrh.war deploy/
 
       - name: Deploy WAR para branch deploy
         run: |
@@ -37,7 +37,12 @@ jobs:
           git config user.email "actions@github.com"
 
           git fetch origin
-          git switch deploy || git checkout --orphan deploy
+          if git ls-remote --exit-code --heads origin deploy; then
+            git fetch origin deploy
+            git checkout deploy
+          else
+            git checkout --orphan deploy
+          fi
 
           rm -rf *
           cp deploy/*.war .
