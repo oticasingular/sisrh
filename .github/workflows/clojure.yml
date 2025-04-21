@@ -1,4 +1,4 @@
-name: Clojure CI
+name: Clojure WAR CI
 
 on:
   push:
@@ -24,3 +24,27 @@ jobs:
 
       - name: Run tests
         run: lein test
+
+      - name: Build WAR
+        if: github.event_name == 'push'
+        run: lein ring war
+
+      - name: Push WAR to deploy branch
+        if: github.event_name == 'push'
+        env:
+          GIT_COMMITTER_NAME: GitHub Actions
+          GIT_COMMITTER_EMAIL: actions@github.com
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin
+          git switch --create deploy || git switch deploy
+          git rm -rf .
+          git clean -fdx
+
+          mv ../sisrh.war sisrh.war  # mova se necessário
+
+          git add sisrh.war
+          git commit -m "Deploy WAR from commit $(git rev-parse --short HEAD)"
+          git push --force origin deploy
