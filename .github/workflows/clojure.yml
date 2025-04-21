@@ -1,4 +1,4 @@
-name: Clojure CI
+name: Clojure WAR CI
 
 on:
   push:
@@ -24,3 +24,12 @@ jobs:
 
       - name: Run tests
         run: lein test
+
+      - name: Build WAR
+        run: lein ring war
+
+      - name: Upload WAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: war-package
+          path: sisrh.war  # ou o nome que você definiu no project.clj

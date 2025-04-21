@@ -62,19 +62,19 @@ public class ServicoEmpregado {
         return empregados;
     }
 
-    @WebMethod(action= "listarSolicitacoesEmpregados")
-    public Solicitacoes listarSolicitacoesEmpregados(String nome) throws Exception {
-     Autenticador.autenticarUsuarioSenha(context);
+    @WebMethod(action= "listarSolicitacoesPorUsuario")
+        public Solicitacoes listarSolicitacoes(String nome) throws Exception {
+            Autenticador.autenticarUsuarioSenha(context);
+            Solicitacoes solicitacoes = new Solicitacoes();
 
-        List<Solicitacao> lista = Banco.listarSolicitacoesPorUsuario(nome);
-        if(lista.isEmpty()){
-            throw new SISRHException("Usuário sem solicitações.");
-        }
+            if (nome == null || nome.trim().isEmpty()) {
+                throw new IllegalArgumentException("Nome do empregado não pode ser vazio.");
+            }
 
-        Solicitacoes solicitacoes =  new Solicitacoes();
-        for(Solicitacao sol : lista){
-            solicitacoes.getSolicitacoes().add(sol);
+            List<Solicitacao> lista = Banco.listarSolicitacoes();
+            for(Solicitacao sol : lista) {
+                solicitacoes.getSolicitacoes().add(sol);
+            }
+            return solicitacoes;
         }
-        return solicitacoes;
-    }
 }

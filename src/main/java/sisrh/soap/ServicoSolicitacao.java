@@ -3,6 +3,7 @@ package sisrh.soap;
 import sisrh.banco.Banco;
 import sisrh.dto.Solicitacao;
 import sisrh.dto.Solicitacoes;
+import sisrh.exception.SISRHException;
 import sisrh.seguranca.Autenticador;
 
 import javax.annotation.Resource;
@@ -22,15 +23,18 @@ public class ServicoSolicitacao {
     WebServiceContext context;
 
     @WebMethod(action = "listarSolicitacoesPorUsuario")
-    public Solicitacoes listarSolicitacoes(String nome) throws Exception {
+    public Solicitacoes listarSolicitacoesPorUsuario(String nome) throws Exception {
         Autenticador.autenticarUsuarioSenha(context);
         Solicitacoes solicitacoes = new Solicitacoes();
 
         if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do empregado não pode ser vazio.");
+            throw new IllegalArgumentException("O email do empregado não pode ser vazio.");
         }
 
         List<Solicitacao> lista = Banco.listarSolicitacoesPorUsuario(nome);
+        if(lista.isEmpty()){
+            throw new SISRHException("Usuário sem solicitações");
+        }
         for(Solicitacao sol : lista) {
             solicitacoes.getSolicitacoes().add(sol);
         }

@@ -1,9 +1,0 @@
-sisrh/dto/Usuario.class
-sisrh/soap/ServicoBasico.class
-sisrh/dto/Empregados.class
-sisrh/exception/SISRHException.class
-sisrh/soap/ServicoEmpregado.class
-sisrh/banco/Banco.class
-sisrh/servlet/InicializarBancoServlet.class
-sisrh/dto/Empregado.class
-sisrh/dto/Solicitacao.class
