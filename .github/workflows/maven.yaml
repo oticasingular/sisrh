@@ -44,6 +44,7 @@ jobs:
             git checkout --orphan deploy
           fi
 
+          # Limpa a pasta antes de copiar o arquivo
           rm -rf *
           cp deploy/sisrh.war .
 
