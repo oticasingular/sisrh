@@ -19,9 +19,6 @@ jobs:
           chmod +x lein
           sudo mv lein /usr/local/bin/
 
-      - name: Install Lein-Ring plugin
-        run: lein plugin install lein-ring "0.12.5"
-
       - name: Install dependencies
         run: lein deps
 
