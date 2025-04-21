@@ -26,13 +26,19 @@ jobs:
       - name: Build com Maven
         run: mvn clean package
 
-      - name: Verificar arquivos gerados
+      - name: Verificar arquivos gerados no target
         run: ls -lah target
 
       - name: Preparar diretório de deploy
         run: |
-          mkdir deploy
-          cp target/sisrh.war deploy/
+          mkdir -p deploy
+          # Verificando se o arquivo .war está presente em target
+          if [ -f target/sisrh.war ]; then
+            cp target/sisrh.war deploy/
+          else
+            echo "Erro: O arquivo sisrh.war não foi encontrado."
+            exit 1
+          fi
 
       - name: Configurar git para o deploy
         run: |
