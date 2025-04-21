@@ -1,0 +1,47 @@
+name: Java Maven Build and Deploy
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build com Maven
+        run: mvn clean package
+
+      - name: Verificar arquivos gerados
+        run: ls -lah target
+
+      - name: Preparar diretório de deploy
+        run: |
+          mkdir deploy
+          cp target/*.war deploy/
+
+      - name: Deploy WAR para branch deploy
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          git fetch origin
+          git switch deploy || git checkout --orphan deploy
+
+          rm -rf *
+          cp deploy/*.war .
+
+          git add *.war
+          git commit -m "Deploy automático do WAR em $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nada para commitar"
+          git push origin deploy --force
