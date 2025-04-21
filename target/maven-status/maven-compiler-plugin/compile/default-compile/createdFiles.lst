@@ -1,9 +1,12 @@
 sisrh/dto/Usuario.class
-sisrh/soap/ServicoBasico.class
-sisrh/dto/Empregados.class
 sisrh/exception/SISRHException.class
 sisrh/soap/ServicoEmpregado.class
+sisrh/soap/ServicoSolicitacao.class
+sisrh/seguranca/Autenticador.class
+sisrh/soap/ServicoBasico.class
+sisrh/dto/Empregados.class
 sisrh/banco/Banco.class
+sisrh/dto/Solicitacoes.class
 sisrh/servlet/InicializarBancoServlet.class
 sisrh/dto/Empregado.class
 sisrh/dto/Solicitacao.class

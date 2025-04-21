@@ -1,0 +1,46 @@
+name: Java Maven Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build com Maven
+        run: mvn clean package
+
+      - name: Verificar arquivos gerados no target
+        run: |
+          ls -lah target
+          # Listar todos os arquivos no diretório de target para depuração
+
+      - name: Preparar diretório de deploy
+        run: |
+          # Verificar se o WAR foi gerado
+          if [ -f target/sisrh.war ]; then
+            echo "Arquivo sisrh.war encontrado, copiando para a pasta deploy"
+            mkdir -p deploy
+            cp target/sisrh.war deploy/
+          else
+            echo "Erro: O arquivo sisrh.war não foi encontrado."
+            exit 1
+          fi
+
+      - name
