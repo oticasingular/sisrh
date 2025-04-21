@@ -28,7 +28,7 @@ jobs:
 
       - name: Preparar diretório de deploy
         run: |
-          mkdir deploy
+          mkdir -p deploy
           cp target/sisrh.war deploy/
 
       - name: Deploy WAR para branch deploy
@@ -45,7 +45,7 @@ jobs:
           fi
 
           rm -rf *
-          cp deploy/*.war .
+          cp deploy/sisrh.war .
 
           git add *.war
           git commit -m "Deploy automático do WAR em $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nada para commitar"
