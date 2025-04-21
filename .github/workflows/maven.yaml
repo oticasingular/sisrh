@@ -29,11 +29,9 @@ jobs:
       - name: Verificar arquivos gerados no target
         run: |
           ls -lah target
-          # Listar todos os arquivos no diretório de target para depuração
 
       - name: Preparar diretório de deploy
         run: |
-          # Verificar se o WAR foi gerado
           if [ -f target/sisrh.war ]; then
             echo "Arquivo sisrh.war encontrado, copiando para a pasta deploy"
             mkdir -p deploy
@@ -43,4 +41,8 @@ jobs:
             exit 1
           fi
 
-      - name
+      - name: Fazer upload do WAR como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: sisrh-war
+          path: deploy/sisrh.war
