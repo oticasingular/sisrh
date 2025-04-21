@@ -1,17 +1,16 @@
-name: Clojure WAR CI
+name: Clojure Build & Deploy
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "*" ]
+    branches: [ deploy ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install Leiningen
         run: |
@@ -19,35 +18,20 @@ jobs:
           chmod +x lein
           sudo mv lein /usr/local/bin/
 
-      - name: Install Lein-Ring plugin
-        run: lein plugin install lein-ring "0.12.5"
-
-      - name: Install dependencies
-        run: lein deps
-
-      - name: Run tests
-        run: lein test
-
-      - name: Build WAR
-        if: github.event_name == 'push'
+      - name: Build WAR file
         run: lein ring war
 
+      - name: Create deploy directory
+        run: mkdir -p deploy && cp target/sisrh.war deploy/
+
       - name: Push WAR to deploy branch
-        if: github.event_name == 'push'
-        env:
-          GIT_COMMITTER_NAME: GitHub Actions
-          GIT_COMMITTER_EMAIL: actions@github.com
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
           git fetch origin
-          git switch --create deploy || git switch deploy
+          git switch deploy || git checkout --orphan deploy
           git rm -rf .
-          git clean -fdx
-
-          mv ../sisrh.war sisrh.war  # mova se necessário
-
-          git add sisrh.war
-          git commit -m "Deploy WAR from commit $(git rev-parse --short HEAD)"
-          git push --force origin deploy
+          cp -r deploy/* .
+          git add .
+          git commit -m "Deploy WAR - $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push origin deploy --force
