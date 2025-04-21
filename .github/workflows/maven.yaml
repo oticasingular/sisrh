@@ -2,9 +2,12 @@ name: Java Maven Build and Deploy
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [ "*" ]
+    branches:
+      - "*"
 
 jobs:
   build-and-deploy:
@@ -28,26 +31,31 @@ jobs:
 
       - name: Preparar diretório de deploy
         run: |
-          mkdir -p deploy
+          mkdir deploy
           cp target/sisrh.war deploy/
 
-      - name: Deploy WAR para branch deploy
+      - name: Configurar git para o deploy
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
+      - name: Criar ou atualizar branch deploy
+        run: |
           git fetch origin
           if git ls-remote --exit-code --heads origin deploy; then
-            git fetch origin deploy
             git checkout deploy
           else
             git checkout --orphan deploy
           fi
 
-          # Limpa a pasta antes de copiar o arquivo
+      - name: Deploy WAR para branch deploy
+        run: |
+          # Limpa a pasta, caso haja conteúdo residual
           rm -rf *
+          # Copia o WAR da pasta de deploy
           cp deploy/sisrh.war .
-
+          
+          # Adiciona, comita e faz push do WAR
           git add *.war
           git commit -m "Deploy automático do WAR em $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nada para commitar"
           git push origin deploy --force
