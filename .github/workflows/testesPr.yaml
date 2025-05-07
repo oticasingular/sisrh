@@ -3,7 +3,7 @@ name: Testes Unitários PR
 on:
   pull_request:
     branches:
-      - master  # Altere para "master" se seu branch principal for master
+      - master
 
 jobs:
   testar:
